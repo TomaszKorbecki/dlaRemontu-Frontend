@@ -1,4 +1,4 @@
-const API_URL = 'https://dlaremontu-backend-api.onrender.com/api';
+const API_URL = 'https://dlaremontu-backend-dev-lukasz.onrender.com/api';
 
 const WINDOW_AREA = 1.8;
 const DOOR_AREA = 2.0;
