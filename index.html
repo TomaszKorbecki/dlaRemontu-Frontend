@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Fix ikon Leaflet -->
+  <script>
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png"
+    });
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BudBase - Wyszukiwarka Budowlana</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+
+<!-- NAV -->
+<nav class="relative bg-white sticky top-0 z-50 border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center gap-2 cursor-pointer" onclick="app.resetToHome()">
+        <i class="fa-solid fa-helmet-safety text-2xl text-amber-600"></i>
+        <span class="font-bold text-lg tracking-tight text-stone-800">BudBase</span>
+      </div>
+      <!-- Menu + CTA -->
+      <div class="flex items-center gap-6">
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-600">
+            <button onclick="app.goToWholesalerSearch()" class="hover:text-stone-900 transition">Szukaj hurtowni</button>
+        </div>
+        <div class="ml-4">
+          <button onclick="app.router('join')" class="bg-[#1e3a8a] hover:bg-[#1e40af] text-white px-5 py-2 rounded-md">
+            Skontaktuj się z Nami
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- DRUGIE MENU (Kategorie) -->
+<div class="relative bg-stone-100 border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex justify-center gap-3 py-3 text-sm font-medium text-stone-700 overflow-x-auto">
+      <button onclick="app.setFilter('category','Farby i lakiery')" class="px-4 py-1.5 rounded-md border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-400 hover:text-amber-700 transition whitespace-nowrap">Farby i lakiery</button>
+      <button onclick="app.setFilter('category','Elektryka')" class="px-4 py-1.5 rounded-md border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-400 hover:text-amber-700 transition whitespace-nowrap">Elektryka</button>
+      <button onclick="app.setFilter('category','Narzędzia')" class="px-4 py-1.5 rounded-md border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-400 hover:text-amber-700 transition whitespace-nowrap">Narzędzia</button>
+      <button onclick="app.setFilter('category','Chemia budowlana')" class="px-4 py-1.5 rounded-md border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-400 hover:text-amber-700 transition whitespace-nowrap">Chemia budowlana</button>
+      <button onclick="app.setFilter('category','Płytki')" class="px-4 py-1.5 rounded-md border border-stone-300 bg-white hover:bg-amber-50 hover:border-amber-400 hover:text-amber-700 transition whitespace-nowrap">Płytki</button>
+      
+      <button id="moreBtn" type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-normal text-stone-800 border border-[#cd5341] rounded-md bg-white hover:opacity-90 transition">Więcej</button>
+    </div>
+  </div>
+
+  <!-- MEGA MENU -->
+  <div id="megaMenu" class="hidden absolute left-0 top-full w-full bg-stone-100 border-t border-stone-200 shadow-lg z-40 transition-all duration-300 ease-out opacity-0 -translate-y-4">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+      <div><h4 class="font-semibold text-stone-800 mb-3">Chemia budowlana</h4><ul class="space-y-2 text-stone-600"><li>Silikony</li><li>Akryle</li><li>Kleje</li><li>Piany</li></ul></div>
+      <div><h4 class="font-semibold text-stone-800 mb-3">Artykuły metalowe</h4><ul class="space-y-2 text-stone-600"><li>Gwoździe</li><li>Wkręty</li><li>Śruby</li></ul></div>
+      <div><h4 class="font-semibold text-stone-800 mb-3">Narzędzia</h4><ul class="space-y-2 text-stone-600"><li>Elektronarzędzia</li><li>Narzędzia ręczne</li></ul></div>
+      <div><h4 class="font-semibold text-stone-800 mb-3">Oświetlenie</h4><ul class="space-y-2 text-stone-600"><li>Żarówki</li><li>Przedłużacze</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<main id="app-content" class="flex-grow max-w-7xl mx-auto px-4 w-full">
+  <div class="loader"></div>
+</main>
+
+<footer class="bg-white border-t border-stone-200 mt-24">
+  <div class="max-w-7xl mx-auto py-12">
+    <div class="px-6">
+      <div class="grid grid-cols-[220px_360px_220px] gap-x-16 items-start text-sm text-stone-600 justify-center">
+          <div>
+            <h4 class="font-semibold text-stone-800 mb-3 leading-tight">Kategorie</h4>
+            <ul class="space-y-2 leading-5">
+                <li><a href="#" class="hover:text-amber-600">Płytki</a></li>
+                <li><a href="#" class="hover:text-amber-600">Instalacje</a></li>
+                <li><a href="#" class="hover:text-amber-600">Chemia</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold text-stone-800 mb-3 leading-tight">Hurtownie</h4>
+            <ul class="grid grid-cols-2 gap-x-8 gap-y-2">
+                <li><a href="#" class="hover:text-amber-600">Wrocław</a></li>
+                <li><a href="#" class="hover:text-amber-600">Warszawa</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold text-stone-800 mb-3 leading-tight">Warto wiedzieć</h4>
+            <ul class="space-y-2 leading-5">
+                <li><a href="#" class="hover:text-amber-600">Regulamin</a></li>
+                <li><a href="#" class="hover:text-amber-600">Dla firm</a></li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="./index.js"></script>
+</body>
+</html>
