@@ -438,14 +438,10 @@ const views = {
   },
 
   join: async container => {
-<<<<<<< Updated upstream
     container.innerHTML = `<section class="max-w-3xl mx-auto py-20 px-6 text-center space-y-6"><h1 class="text-4xl font-bold text-stone-900">Dołącz do BudBase_1</h1><p class="text-lg text-stone-600">Zwiększ widoczność swojej hurtowni.</p><div class="bg-white border border-stone-200 rounded-2xl p-8 shadow-md text-left"><h3 class="text-xl font-bold mb-4">Formularz kontaktowy</h3><form class="grid gap-4"><input class="input" placeholder="Nazwa firmy"><input class="input" placeholder="E-mail"><button type="button" onclick="alert('Wysłano!')" class="bg-[#cd5341] text-white py-3 rounded-lg font-bold hover:bg-[#993f31]">Wyślij</button></form></div></section>`;
-=======
-    container.innerHTML = `<section class="max-w-3xl mx-auto py-20 px-6 text-center space-y-6"><h1 class="text-4xl font-bold text-stone-900">Dołącz do BudBase_Test</h1><p class="text-lg text-stone-600">Zwiększ widoczność swojej hurtowni.</p><div class="bg-white border border-stone-200 rounded-2xl p-8 shadow-md text-left"><h3 class="text-xl font-bold mb-4">Formularz kontaktowy</h3><form class="grid gap-4"><input class="input" placeholder="Nazwa firmy"><input class="input" placeholder="E-mail"><button type="button" onclick="alert('Wysłano!')" class="bg-[#cd5341] text-white py-3 rounded-lg font-bold hover:bg-[#993f31]">Wyślij</button></form></div></section>`;
->>>>>>> Stashed changes
   },
 
-  admin: async container => {
+  admin: async container => { 
       const catOpts = state.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
       container.innerHTML = `
         <div class="max-w-2xl mx-auto py-12 px-6">
