@@ -1,144 +1,356 @@
 <div class="max-w-7xl mx-auto px-6 py-20 space-y-20">
 
-<section class="max-w-3xl space-y-4">
-        
-    <h1 class="text-4xl font-bold text-stone-900 leading-tight">
-      Współpraca z dlaremontu
-    </h1>
-    <p class="text-lg text-stone-600">
-      Pomagamy hurtowniom, sklepom i producentom materiałów budowlanych
-      docierać do klientów dokładnie wtedy, gdy są gotowi kupić.
-    </p>
-  </section>
+<!-- ================= HERO ================= -->
+<section class="relative w-full py-20 overflow-hidden">
 
-  <!-- JAK TO DZIAŁA -->
-  <section class="space-y-10">
-
-    <div class="max-w-2xl space-y-2">
-      <h2 class="text-2xl font-bold text-stone-900">
-        Jak to działa?
-      </h2>
-      <p class="text-stone-600">
-        Prosty proces, bez pośredników i prowizji od sprzedaży.
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-8">
-
-      <div class="bg-white border border-stone-200 rounded-2xl p-7
-                  shadow-sm">
-        <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white
-                    flex items-center justify-center font-bold mb-4">
-          1
-        </div>
-        <h3 class="text-lg font-semibold text-stone-900 mb-2">
-          Klient szuka materiałów
-        </h3>
-        <p class="text-sm text-stone-600">
-          Wpisuje produkt i lokalizację, aby sprawdzić dostępność
-          materiałów w swojej okolicy.
+    <!-- BĄBELEK LEWY -->
+        <div
+          class="absolute
+                 -top-24 left-[15%]
+                 w-[250px] h-[250px]
+                 bg-[#f1f5f9]
+                 opacity-100"
+          style="border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;"
+        ></div>
+    
+        <!-- BĄBELEK PRAWY -->
+     <div
+      class="absolute
+             -top-24 right-[6%]
+             w-[440px] h-[380px]
+             bg-[#eef2ff]
+             pointer-events-none"
+      style="
+        border-radius:
+          62% 38% 55% 45% /
+          48% 60% 40% 52%;
+      "
+    ></div>
+    
+      <!-- TREŚĆ (OGRANICZONA SZEROKOŚĆ) -->
+      <div class="relative z-10 max-w-3xl mx-auto text-center space-y-6 px-4">
+    
+        <h1 class="text-3xl md:text-4xl font-semibold text-stone-900 leading-snug">
+          Docieraj do klientów gotowych do zakupu materiałów
+        </h1>
+    
+        <p class="text-base text-stone-600 max-w-2xl mx-auto">
+          Pomagamy hurtowniom i sklepom budowlanym być widocznymi dokładnie
+          w momencie podejmowania decyzji zakupowej.
         </p>
-      </div>
-
-      <div class="bg-white border border-stone-200 rounded-2xl p-7
-                  shadow-sm">
-        <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white
-                    flex items-center justify-center font-bold mb-4">
-          2
+    
+        <div class="pt-4">
+          <button
+            onclick="document.getElementById('contact-cta').scrollIntoView({ behavior: 'smooth' })"
+            class="bg-[#cd5341] hover:bg-[#993f31] text-white px-8 py-3 rounded-lg font-semibold transition">
+            Sprawdź, czy to ma sens
+          </button>
+    
+          <p class="text-xs text-stone-500 mt-3">
+            Bez zobowiązań • Rozmowa ok. 10 minut • Oddzwonimy w 24h
+          </p>
         </div>
-        <h3 class="text-lg font-semibold text-stone-900 mb-2">
-          Trafia na Twoją ofertę
-        </h3>
-        <p class="text-sm text-stone-600">
-          Widzi Twoją firmę, lokalizację oraz dane kontaktowe —
-          bez pośredników.
-        </p>
+    
       </div>
-
-      <div class="bg-white border border-stone-200 rounded-2xl p-7
-                  shadow-sm">
-        <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white
-                    flex items-center justify-center font-bold mb-4">
-          3
+    
+    </section>
+    
+    
+    
+    <!-- ================= JAK TO DZIAŁA + CENA ================= -->
+    <section class="mt-16">
+      <div class="max-w-6xl mx-auto grid md:grid-cols-[1.4fr_1fr] gap-12 items-start">
+    
+        <!-- JAK TO DZIAŁA -->
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-4">
+            Jak to działa w praktyce
+          </h2>
+    
+          <p class="text-stone-600 mb-10 max-w-xl">
+            Bez pośredników, bez prowizji. Klient trafia bezpośrednio do Twojej firmy.
+          </p>
+    
+          <div class="relative space-y-10">
+            <div class="absolute left-5 top-0 bottom-0 w-px bg-stone-200"></div>
+    
+            <div class="relative flex gap-6">
+              <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white flex items-center justify-center font-semibold">1</div>
+              <div>
+                <h3 class="text-lg font-semibold text-stone-900">Klient szuka materiału</h3>
+                <p class="text-sm text-stone-600 max-w-md">
+                  Wpisuje konkretny produkt i lokalizację.
+                </p>
+              </div>
+            </div>
+    
+            <div class="relative flex gap-6">
+              <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white flex items-center justify-center font-semibold">2</div>
+              <div>
+                <h3 class="text-lg font-semibold text-stone-900">Trafia na Twoją firmę</h3>
+                <p class="text-sm text-stone-600 max-w-md">
+                  Widzi ofertę, lokalizację i dane kontaktowe.
+                </p>
+              </div>
+            </div>
+    
+            <div class="relative flex gap-6">
+              <div class="w-10 h-10 rounded-full bg-[#cd5341] text-white flex items-center justify-center font-semibold">3</div>
+              <div>
+                <h3 class="text-lg font-semibold text-stone-900">Kontakt bezpośredni</h3>
+                <p class="text-sm text-stone-600 max-w-md">
+                  Dzwoni, przyjeżdża lub składa zapytanie.
+                </p>
+                <p class="text-sm font-medium text-[#cd5341] mt-2">
+                  Bez prowizji i bez pośredników
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg font-semibold text-stone-900 mb-2">
-          Kontakt bezpośredni
-        </h3>
-        <p class="text-sm text-stone-600">
-          Telefon, wizyta w punkcie sprzedaży lub zapytanie hurtowe.
-        </p>
+    
+        <!-- CENA -->
+        <div class="max-w-sm self-start">
+          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-8 space-y-6">
+    
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                Współpraca od
+              </div>
+              <div class="flex items-end gap-2 mt-1">
+                <div class="text-4xl font-bold text-stone-900">299 zł</div>
+                <div class="text-sm text-stone-500 mb-1">/ miesiąc</div>
+              </div>
+            </div>
+    
+            <ul class="space-y-3 text-sm text-stone-600">
+              <li>• Widoczność wśród lokalnych klientów</li>
+              <li>• Zapytania od klientów gotowych do zakupu</li>
+              <li>• Brak prowizji od sprzedaży</li>
+              <li>• Brak pośredników</li>
+            </ul>
+    
+            <button
+              onclick="document.getElementById('contact-cta').scrollIntoView({ behavior: 'smooth' })"
+              class="w-full bg-[#cd5341] hover:bg-[#993f31] text-white py-3 rounded-lg font-semibold transition">
+              Umów krótką rozmowę
+            </button>
+    
+            <p class="text-xs text-stone-500 text-center">
+              Bez umów • Bez zobowiązań
+            </p>
+    
+          </div>
+        </div>
+    
       </div>
-
-    </div>
-</div>
-  </section>
-
-  <!-- CONTENT + FORM -->
-  <section class="grid md:grid-cols-2 gap-12 items-start">
-
-    <!-- LEFT -->
-    <div class="space-y-8 max-w-md">
-
-      <div>
-        <h2 class="text-xl font-semibold text-stone-900 mb-3">
-          Dla kogo jest dlaremontu?
+    </section>
+    
+    <!-- ================= DLACZEGO WARTO ================= -->
+    <section class="mt-24 max-w-6xl mx-auto">
+    
+      <div class="text-center mb-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-4">
+          Dlaczego firmy decydują się na współpracę
         </h2>
-        <ul class="space-y-2 text-sm text-stone-600">
-          <li>• hurtownie budowlane</li>
-          <li>• sklepy remontowe</li>
-          <li>• producenci materiałów budowlanych</li>
-          <li>• sieci i pojedyncze punkty sprzedaży</li>
-        </ul>
-      </div>
-
-      <div class="bg-stone-50 border border-stone-200 rounded-xl p-5">
-        <p class="text-sm italic text-stone-700">
-          „Klienci trafiają do nas z konkretnymi zapytaniami,
-          a nie tylko po porównanie cen.”
+        <p class="text-stone-600 max-w-2xl mx-auto">
+          Bo chcą być widoczne dokładnie wtedy, gdy klient jest gotowy kupić —
+          a nie tylko porównywać ceny.
         </p>
-        <div class="mt-3 text-xs text-stone-500">
-          Hurtownia budowlana, Dolny Śląsk
+      </div>
+    
+    <!-- BĄBELKI – POZA KARTĄ -->
+    <div class="absolute inset-0 pointer-events-none z-0">
+    
+      <!-- LEWY – DELIKATNY -->
+      <div
+        class="absolute
+               -bottom-[220px] -left-[260px]
+               w-[520px] h-[520px]"
+        style="
+          background:#6b70a3;
+          opacity:0.15;
+          border-radius:55% 45% 60% 40% / 40% 60% 45% 55%;
+        "
+      ></div></div>
+    
+      <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12">
+    
+    
+        
+        <!-- KORZYŚCI -->
+        <div class="bg-white border border-stone-200 rounded-2xl p-8">
+          <h3 class="text-lg font-semibold text-stone-900 mb-6">
+            Co realnie zyskujesz
+          </h3>
+    
+          <ul class="space-y-4 text-sm text-stone-700">
+            <li>✓ Realne zapytania od lokalnych klientów</li>
+            <li>✓ Klientów zdecydowanych na zakup</li>
+            <li>✓ Przewidywalny koszt miesięczny</li>
+            <li>✓ Brak prowizji od sprzedaży</li>
+          </ul>
         </div>
+    
+        <!-- CZEGO NIE ROBIMY -->
+        <div class="bg-stone-100 border-l-4 border-[#cd5341] rounded-2xl p-8">
+          <h3 class="text-lg font-semibold text-stone-900 mb-6">
+            To nie jest reklama
+          </h3>
+    
+          <ul class="space-y-2 text-sm text-stone-700">
+            <li>✕ Nie sprzedajemy klików ani odsłon</li>
+            <li>✕ Nie zbieramy zapytań do porównań cen</li>
+            <li>✕ Nie pośredniczymy w sprzedaży</li>
+          </ul>
+        </div>
+    
       </div>
-
-    </div>
-
-    <!-- FORM -->
-    <div class="bg-white border border-stone-200 rounded-2xl p-8
-                shadow-md space-y-6">
-
-      <div>
-        <h3 class="text-xl font-bold text-stone-900 mb-1">
-          Zostaw kontakt
-        </h3>
-        <p class="text-sm text-stone-600">
-          Krótka rozmowa wystarczy, aby sprawdzić,
-          czy dlaremontu ma sens dla Twojej firmy.
+    </section>
+    
+    <!-- ================= SUCCESS STORY ================= -->
+    <section class="mt-24 max-w-5xl mx-auto">
+    
+      <!-- HEADER -->
+      <div class="text-center mb-14">
+        <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-3">
+          Jak wygląda współpraca w praktyce?
+        </h2>
+        <p class="text-stone-600 max-w-xl mx-auto">
+          Prawdziwe historie firm, które zaczęły dostawać
+          zapytania dokładnie wtedy, gdy klienci byli gotowi kupić.
         </p>
       </div>
-
-      <form class="grid gap-4">
-        <input class="input" placeholder="Nazwa firmy" />
-        <input class="input" placeholder="Miasto / region" />
-        <input class="input" placeholder="E-mail" />
-        <input class="input" placeholder="Telefon (opcjonalnie)" />
-
-        <button
-          type="button"
-          onclick="alert('Dziękujemy! Skontaktujemy się z Tobą.')"
-          class="mt-2 bg-[#cd5341] hover:bg-[#993f31]
-                 text-white py-3 rounded-lg font-semibold transition">
-          Wyślij zgłoszenie
-        </button>
-
-        <p class="text-xs text-stone-500">
-          Współpraca od <strong>399 zł / miesiąc</strong>.
-          Każdą firmę wyceniamy indywidualnie.
-        </p>
-      </form>
-
-    </div>
-
-  </section>
+    
+      <!-- STORY 1 -->
+      <div class="bg-white border border-stone-200 rounded-2xl p-8 mb-10">
+    
+        <div class="flex gap-4 items-start">
+          <!-- ICON -->
+          <div class="w-10 h-10 rounded-full bg-[#cd5341]/10
+                      flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="w-5 h-5 text-[#cd5341]"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 10h18M5 10V6a1 1 0 011-1h12a1 1 0 011 1v4M5 10v8a1 1 0 001 1h4m8-9v8a1 1 0 01-1 1h-4" />
+            </svg>
+          </div>
+    
+          <!-- CONTENT -->
+          <div>
+            <div class="text-xs font-semibold text-[#cd5341] uppercase tracking-wide mb-1">
+              Hurtownia budowlana • Dolny Śląsk
+            </div>
+    
+            <h3 class="text-lg font-semibold text-stone-900 mb-2">
+              Klienci dzwonią z konkretem, nie po ceny
+            </h3>
+    
+            <p class="text-sm text-stone-700 mb-3 max-w-2xl">
+              Zaczęli dzwonić klienci z bardzo konkretnymi pytaniami:
+              dostępność, ilości, termin odbioru.
+              Część to ekipy remontowe z innych regionów Polski,
+              część inwestorzy realizujący projekty „na miejscu”.
+            </p>
+    
+            <blockquote class="border-l-2 border-[#cd5341] pl-4 italic text-sm text-stone-600">
+              „To nie są telefony po cenę. To rozmowy z ludźmi,
+              którzy dokładnie wiedzą, czego chcą.”
+            </blockquote>
+          </div>
+        </div>
+    
+      </div>
+    
+    
+    
+      <!-- STORY 2 -->
+      <div class="bg-white border border-stone-200 rounded-2xl p-8">
+    
+        <div class="flex gap-4 items-start">
+          <!-- ICON -->
+          <div class="w-10 h-10 rounded-full bg-[#cd5341]/10
+                      flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="w-5 h-5 text-[#cd5341]"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 7h16l-1.5 9a2 2 0 01-2 1.5H7.5a2 2 0 01-2-1.5L4 7z" />
+            </svg>
+          </div>
+    
+          <!-- CONTENT -->
+          <div>
+            <div class="text-xs font-semibold text-[#cd5341] uppercase tracking-wide mb-1">
+              Sklep remontowy • Wielkopolska
+            </div>
+    
+            <h3 class="text-lg font-semibold text-stone-900 mb-2">
+              Nie reklama, tylko bycie na miejscu
+            </h3>
+    
+            <p class="text-sm text-stone-700 mb-3 max-w-2xl">
+              Firma nie chciała kolejnej kampanii ani leadów „do rozeznania”.
+              Po kilku tygodniach zaczęły trafiać osoby po decyzji:
+              kupione mieszkanie, ustalony zakres remontu,
+              materiały potrzebne „na już”.
+            </p>
+    
+            <blockquote class="border-l-2 border-[#cd5341] pl-4 italic text-sm text-stone-600">
+              „Nie reklamujemy się. Po prostu jesteśmy tam,
+              gdzie klient faktycznie szuka materiałów.”
+            </blockquote>
+          </div>
+        </div>
+    
+      </div>
+    
+    </section>
+    
+    
+    
+    
+    
+    <!-- ANCHOR DLA CTA -->
+    <div id="contact-cta"></div>
+    
+    <!-- ================= FORMULARZ ================= -->
+    <section id="contact-form" class="mt-32 pb-28">
+      <div class="max-w-3xl mx-auto">
+    
+        <div class="text-center mb-12">
+          <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-4">
+            Porozmawiajmy, czy to ma sens dla Twojej firmy
+          </h2>
+          <p class="text-stone-600 max-w-xl mx-auto">
+            Oddzwonimy w ciągu 24 godzin. Rozmowa potrwa około 10 minut.
+          </p>
+        </div>
+    
+        <div class="bg-white border border-stone-200 rounded-3xl p-8 shadow-lg">
+          <form class="grid gap-6">
+    
+            <input class="input" placeholder="Nazwa firmy" />
+            <input class="input" placeholder="Miasto / region" />
+            <input type="email" class="input" placeholder="Adres e-mail" />
+            <input type="tel" class="input" placeholder="Telefon" />
+    
+            <button
+              type="button"
+              onclick="alert('Dziękujemy! Skontaktujemy się z Tobą w ciągu 24 godzin.')"
+              class="bg-[#cd5341] hover:bg-[#993f31] text-white py-4 rounded-xl font-semibold transition">
+              Umów krótką rozmowę
+            </button>
+    
+            <div class="text-center text-xs text-stone-500">
+              Bez umów • Bez prowizji • Bez zobowiązań
+            </div>
+    
+          </form>
+        </div>
+    
+      </div>
+    </section>
 
 </div>
