@@ -437,29 +437,16 @@ const views = {
     } catch(e) { container.innerHTML = 'Błąd wczytywania hurtowni'; }
   },
 
-  join: async container => {
-    container.innerHTML = `<section class="max-w-3xl mx-auto py-20 px-6 text-center space-y-6"><h1 class="text-4xl font-bold text-stone-900">Dołącz do BudBase_2</h1><p class="text-lg text-stone-600">Zwiększ widoczność swojej hurtowni.</p><div class="bg-white border border-stone-200 rounded-2xl p-8 shadow-md text-left"><h3 class="text-xl font-bold mb-4">Formularz kontaktowy</h3><form class="grid gap-4"><input class="input" placeholder="Nazwa firmy"><input class="input" placeholder="E-mail"><button type="button" onclick="alert('Wysłano!')" class="bg-[#cd5341] text-white py-3 rounded-lg font-bold hover:bg-[#993f31]">Wyślij</button></form></div></section>`;
-  },
+// Tu rozpoczyta się sekcja kontaktu
 
-  admin: async container => { 
-      const catOpts = state.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-      container.innerHTML = `
-        <div class="max-w-2xl mx-auto py-12 px-6">
-            <h2 class="text-2xl font-bold mb-6">Panel Admina</h2>
-            <form class="bg-white p-6 rounded shadow border" onsubmit="app.addProduct(event)">
-                <div class="space-y-4">
-                    <input name="pName" placeholder="Nazwa produktu" class="input" required>
-                    <select name="pCat" class="input" required>${catOpts}</select>
-                    <textarea name="pDesc" placeholder="Opis" class="input" rows="3"></textarea>
-                    <input data-attr-key="brand" placeholder="Marka" class="input">
-                    <input data-attr-key="capacity" placeholder="Pojemność (np. 2.5)" class="input">
-                    <button class="bg-stone-900 text-white px-6 py-2 rounded">Dodaj</button>
-                </div>
-            </form>
-        </div>
-      `;
-  }
+  join: async (container) => {
+    const res = await fetch('/views/static/join.html');
+    const html = await res.text();
+    container.innerHTML = html;
+  },
 };
+
+// Tu kończy się sekcja kontaktu
 
 document.addEventListener('DOMContentLoaded', () => {
   app.init();
