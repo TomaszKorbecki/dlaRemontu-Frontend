@@ -1,5 +1,8 @@
 <!-- ================= HERO ================= -->
-<section class="relative w-full py-20 overflow-hidden">
+<section
+  class="relative w-full py-20 overflow-hidden
+         bg-[linear-gradient(180deg,rgba(205,83,65,0.08)_0%,#ffffff_70%)]
+         md:bg-none">
 
     <!-- BĄBELEK LEWY -->
         <div
@@ -26,16 +29,24 @@
     ></div>
     
       <!-- TREŚĆ (OGRANICZONA SZEROKOŚĆ) -->
-      <div class="relative z-10 max-w-3xl mx-auto text-center space-y-6 px-4">
+<div class="relative z-10 max-w-3xl mx-auto text-center space-y-6 px-4">
+
+  <p class="md:hidden text-xs text-[#cd5341] font-semibold tracking-wide uppercase">
+    Dla hurtowni i sklepów budowlanych
+  </p>
+
+  <h1 class="text-3xl md:text-4xl font-semibold text-stone-900 leading-snug">
+    Docieraj do klientów, którzy JUŻ chcą kupić materiały
+  </h1>
     
-        <h1 class="text-3xl md:text-4xl font-semibold text-stone-900 leading-snug">
-          Docieraj do klientów gotowych do zakupu materiałów
-        </h1>
-    
-        <p class="text-base text-stone-600 max-w-2xl mx-auto">
-          Pomagamy hurtowniom i sklepom budowlanym być widocznymi dokładnie
-          w momencie podejmowania decyzji zakupowej.
-        </p>
+  <p class="text-base text-stone-600 max-w-2xl mx-auto">
+    Pomagamy hurtowniom i sklepom budowlanym być widocznymi dokładnie
+    w momencie podejmowania decyzji zakupowej.
+  </p>
+  
+  <p class="md:hidden text-sm font-medium text-[#cd5341]">
+    Bez prowizji • Bez pośredników • Klienci zdecydowani
+  </p>
     
         <div class="pt-4">
           <button
@@ -116,7 +127,7 @@
                 Współpraca od
               </div>
               <div class="flex items-end gap-2 mt-1">
-                <div class="text-4xl font-bold text-stone-900">299 zł</div>
+                <div class="text-4xl font-bold text-stone-900">399 zł</div>
                 <div class="text-sm text-stone-500 mb-1">/ miesiąc</div>
               </div>
             </div>
@@ -142,6 +153,15 @@
         </div>
     
       </div>
+
+      <div class="mt-10 text-center md:hidden">
+        <button
+          onclick="document.getElementById('contact-cta').scrollIntoView({ behavior: 'smooth' })"
+          class="bg-[#cd5341] text-white px-6 py-3 rounded-lg font-semibold">
+          Umów krótką rozmowę
+        </button>
+      </div>
+
     </section>
     
     <!-- ================= DLACZEGO WARTO ================= -->
