@@ -1,3 +1,7 @@
+import { productDetailView } from './views/ProductDetails.js';
+import { SearchBar } from './views/components/SearchBar.js';
+
+
 const API_URL = 'https://dlaremontu-backend-dev-lukasz.onrender.com/api';
 
 const WINDOW_AREA = 1.8;
@@ -44,7 +48,18 @@ const app = {
     try {
       if (view === 'home') await views.home(container);
       else if (view === 'wholesalersList') await views.wholesalersList(container);
-      else if (view === 'productDetail') await views.productDetail(container, param);
+
+      else if (view === 'productDetail') {
+        await productDetailView(container, param, {
+          API_URL,
+          state,
+          renderSearchBar,
+          renderAssistantTeaser,
+          renderAssistantSection,
+          hasUserLocation,
+          initLocationsMap
+        });
+      }      
       else if (view === 'wholesalerDetail') await views.wholesalerDetail(container, param);
       else if (view === 'join') await views.join(container);
       else if (view === 'admin') await views.admin(container);
@@ -334,65 +349,7 @@ const views = {
       </section>
     `;
     initLocationsMap({ elementId: "wholesalers-map", height: 600, locations: mapLocations });
-  },
-
-  productDetail: async (container, id) => {
-    try {
-        const res = await fetch(`${API_URL}/products/${id}`);
-        if(!res.ok) throw new Error("Produkt nie znaleziony");
-        const { product, availability } = await res.json();
-        window.currentProduct = { coverage: product.attributes?.coverage || DEFAULT_COVERAGE, capacity: product.attributes?.capacity || 2.5 };
-        const filteredAvail = state.filters.city === 'Wszystkie' ? availability : availability.filter(a => a.city === state.filters.city);
-        const mapLocations = filteredAvail.map(a => ({ id: a.id, lat: a.lat, lng: a.lng, name: a.name, address: a.address }));
-
-        container.innerHTML = `
-          <div class="relative">
-            <div class="absolute inset-x-0 top-0 h-[340px] overflow-hidden pointer-events-none z-0">
-                <div class="absolute -top-28 left-[25%] w-[260px] h-[180px] bg-[#f1f5f9]" style="border-radius:55% 45% 60% 40% / 40% 60% 45% 55%;"></div>
-                <div class="absolute -top-36 right-[15%] w-[260px] h-[240px] bg-[#eef2ff]" style="border-radius:62% 38% 55% 45% / 48% 60% 40% 52%;"></div>
-            </div>
-            <div class="relative z-10 fade-in max-w-7xl mx-auto px-6 py-10 space-y-10">
-                <div class="text-sm text-stone-500 mb-6"><span class="text-[#cd5341] hover:opacity-80 cursor-pointer font-medium" onclick="app.router('home')">Strona główna</span> / ${product.name}</div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:col-span-8 space-y-8">
-                        <h1 class="text-3xl font-bold text-stone-900">${product.name}</h1>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="rounded-xl p-6 bg-white border">
-                                <h3 class="font-semibold mb-3">Specyfikacja</h3>
-                                <ul class="text-sm text-stone-600 space-y-2 list-disc list-inside">
-                                    ${Object.entries(product.attributes).map(([k,v]) => `<li>${k}: ${v}</li>`).join('')}
-                                </ul>
-                            </div>
-                            <div class="p-6">
-                                <h3 class="font-semibold mb-3">Opis</h3>
-                                <p class="text-sm text-stone-600 leading-relaxed">${product.description}</p>
-                            </div>
-                        </div>
-                        <div class="rounded-xl bg-[#f7f7f7] p-6">
-                            <h3 class="font-semibold mb-4">Kalkulator zużycia</h3>
-                            <div class="flex gap-6 items-end">
-                                <div><label class="block text-sm text-stone-500 mb-1">Powierzchnia (m²)</label><input type="number" class="w-24 border border-stone-300 rounded-md px-3 py-2 text-sm" oninput="state.calc.area=+this.value; recalcMaterials()"></div>
-                                <div><label class="block text-sm text-stone-500 mb-1">Warstwy</label><input type="number" value="2" class="w-24 border border-stone-300 rounded-md px-3 py-2 text-sm" oninput="state.calc.coats=+this.value; recalcMaterials()"></div>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-stone-200 text-sm">Potrzebna ilość farby: <span id="paint-result" class="text-xl font-semibold text-stone-800 ml-2">—</span></div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-4 space-y-6">
-                        <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-4">
-                            <div><div class="text-xs uppercase tracking-wide text-stone-500">Cena sugerowana</div><div class="text-2xl font-bold text-stone-900">${product.price} zł / szt.</div><div class="text-xs text-stone-500">Dostępny w ${availability.length} sklepach</div></div>
-                            <div id="product-map" class="relative rounded-xl border border-stone-200 bg-stone-100 overflow-hidden h-64"></div>
-                            <div class="bg-stone-50 rounded-lg p-2 max-h-64 overflow-auto">
-                                ${filteredAvail.map(a => `<div class="p-2 border-b border-stone-200 last:border-0 hover:bg-white cursor-pointer" onclick="app.router('wholesalerDetail', '${a.id}')"><div class="font-bold text-sm text-stone-800">${a.name}</div><div class="text-xs text-stone-500">${a.city}</div><div class="text-xs font-bold ${a.stock > 10 ? 'text-green-600' : 'text-red-600'}">Stan: ${a.stock} szt.</div></div>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-        `;
-        initLocationsMap({ elementId: "product-map", height: 256, locations: mapLocations });
-    } catch(e) { container.innerHTML = 'Błąd wczytywania produktu'; }
-  },
+  }, 
 
   wholesalerDetail: async (container, id) => {
     state.activeWholesalerId = id;
