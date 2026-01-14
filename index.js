@@ -1,6 +1,18 @@
-import { productDetailView } from './views/ProductDetails.js';
+import { productDetailView } from './views/productDetail.js';
 import { SearchBar } from './views/components/SearchBar.js';
+import { BackgroundBubbles } from './views/layouts/BackgroundBubbles.js';
+import { homeView } from './views/home.view.js';
+import { productListView } from './views/productList.view.js';
 
+
+
+function renderSearchBar() {
+  return SearchBar({ state });
+}
+
+function hasUserLocation() {
+  return state.filters.city && state.filters.city !== 'Wszystkie';
+}
 
 const API_URL = 'https://dlaremontu-backend-dev-lukasz.onrender.com/api';
 
@@ -46,16 +58,20 @@ const app = {
     container.dataset.view = view;
 
     try {
-      if (view === 'home') await views.home(container);
-      else if (view === 'wholesalersList') await views.wholesalersList(container);
+      if (view === 'home') {
+        await homeView(container, { state });
+      }
+            else if (view === 'wholesalersList') await views.wholesalersList(container);
+            else if (view === 'productList') {
+              await productListView(container, { state, API_URL });
+            }
+            
 
       else if (view === 'productDetail') {
         await productDetailView(container, param, {
           API_URL,
           state,
           renderSearchBar,
-          renderAssistantTeaser,
-          renderAssistantSection,
           hasUserLocation,
           initLocationsMap
         });
@@ -69,17 +85,43 @@ const app = {
     }
   },
 
-  setFilter: (key, val) => { state.filters[key] = val; if(key==='category') state.filters.attributes={}; app.router('home'); },
-  resetToHome: () => { state.searchMode = 'products'; state.filters={keyword:'',category:'',city:'Wszystkie',minPrice:0,maxPrice:1000,selectedBrands:[],attributes:{}}; app.router('home'); },
+  setFilter: (key, val) => {
+    state.filters[key] = val;
+    if (key === 'category') state.filters.attributes = {};
+    app.router('productList');
+  }, 
+  
   goToWholesalerSearch: () => { state.searchMode = 'wholesalers'; app.router('wholesalersList'); },
   
+  resetToHome: () => {
+    state.searchMode = 'products';
+    state.filters = {
+      keyword: '',
+      category: '',
+      city: 'Wszystkie',
+      minPrice: 0,
+      maxPrice: 1000,
+      selectedBrands: [],
+      attributes: {}
+    };
+  
+    app.router('home');
+  },
+
   toggleBrand: (brand) => {
-      if (state.filters.selectedBrands.includes(brand)) state.filters.selectedBrands = state.filters.selectedBrands.filter(b => b !== brand);
-      else state.filters.selectedBrands.push(brand);
-      app.router('home');
+    if (state.filters.selectedBrands.includes(brand))
+      state.filters.selectedBrands = state.filters.selectedBrands.filter(b => b !== brand);
+    else
+      state.filters.selectedBrands.push(brand);
+  
+    app.router('productList');
   },
   
-  setPrice: (val) => { state.filters.maxPrice = val; app.router('home'); },
+  setPrice: (val) => {
+    state.filters.maxPrice = val;
+    app.router('productList');
+  },
+  
 
   // Wholesaler Assortment
   setWholesalerKeyword: (value) => {
@@ -203,116 +245,6 @@ function initLocationsMap({ elementId, locations, height = 256 }) {
 // --- WIDOKI ---
 
 const views = {
-  home: async container => {
-    const isSearchActive = state.filters.keyword || state.filters.category || (state.filters.city && state.filters.city !== 'Wszystkie');
-    const params = new URLSearchParams({
-        keyword: state.filters.keyword, category: state.filters.category || '',
-        city: state.filters.city === 'Wszystkie' ? '' : state.filters.city,
-        minPrice: state.filters.minPrice, maxPrice: state.filters.maxPrice
-    });
-    if (state.filters.selectedBrands.length > 0) params.append('brands', state.filters.selectedBrands.join(','));
-
-    let products = [];
-    if (isSearchActive) {
-        const res = await fetch(`${API_URL}/products?${params}`);
-        products = await res.json();
-    }
-
-    // --- SEKCJA SEARCH ---
-    const searchHeader = `
-      <section class="relative bg-white ${isSearchActive ? 'pt-16 pb-16' : 'py-24'}">
-        ${!isSearchActive ? `<div class="absolute top-1/2 right-0 -translate-y-1/2 w-[60%] h-[100%] pointer-events-none z-0"><div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('./images/1.jpg');"></div></div>` : ''}
-        ${isSearchActive ? `<div class="absolute inset-0 overflow-hidden pointer-events-none z-0"><div class="absolute -top-24 left-[15%] w-[250px] h-[250px] bg-[#f1f5f9]" style="border-radius:55% 45% 60% 40% / 40% 60% 45% 55%;"></div><div class="absolute -top-24 right-[6%] w-[440px] h-[380px] bg-[#eef2ff]" style="border-radius:62% 38% 55% 45% / 48% 60% 40% 52%;"></div></div>` : ''}
-        
-        <div class="relative max-w-7xl mx-auto px-6 z-10">
-          <div class="${isSearchActive ? 'flex justify-center' : ''}">
-            <div>
-              ${!isSearchActive ? `<h1 class="text-4xl md:text-5xl font-bold text-stone-800 mb-4">Remontowe potrzeby?</h1><p class="text-lg text-stone-500 mb-10 max-w-xl">Znajdź wszystko w lokalnych hurtowniach</p>` : ''}
-              <form id="searchForm" onsubmit="event.preventDefault(); app.router('home');" class="flex flex-col md:flex-row items-center gap-4 max-w-3xl ${isSearchActive ? 'mx-auto' : ''}">
-                <div class="flex items-center gap-3 bg-white rounded-full shadow px-6 py-4 flex-1 w-full">
-                  <i class="fa-solid fa-magnifying-glass text-stone-400"></i>
-                  <input type="text" id="searchKeyword" placeholder="Szukaj produktów (np. Farba)" value="${state.filters.keyword}" onchange="state.filters.keyword=this.value; app.router('home')" class="bg-transparent outline-none text-sm w-full fixed-search-input"/>
-                </div>
-                <div class="relative flex-1 min-w-[280px] w-full">
-                  <div class="flex items-center gap-3 bg-white rounded-full shadow px-6 py-4">
-                    <i class="fa-solid fa-location-dot text-stone-400"></i>
-                    <select id="cityInput" class="bg-transparent outline-none text-sm w-full" onchange="state.filters.city=this.value; app.router('home')">
-                      ${state.cities.map(c => `<option value="${c}" ${state.filters.city===c?'selected':''}>${c}</option>`).join('')}
-                    </select>
-                  </div>
-                </div>
-                <button type="submit" class="bg-[#cd5341] hover:bg-[#993f31] text-white font-semibold px-10 py-4 rounded-full transition">Szukaj</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-    `;
-
-    // --- SEKCJA WYNIKÓW ---
-    const resultsSection = isSearchActive ? `
-      <section class="max-w-7xl mx-auto px-6 pt-10 pb-20">
-        <div class="grid grid-cols-12 gap-8">
-            <!-- SIDEBAR FILTRÓW -->
-            <aside class="col-span-12 md:col-span-3">
-                <div class="bg-white rounded-xl shadow p-6 sticky top-28 space-y-6 border border-stone-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg">Filtry</h3>
-                        <button onclick="app.resetToHome()" class="text-xs text-[#cd5341] hover:underline">Wyczyść</button>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold mb-2 text-sm">Producent</h4>
-                        <div class="space-y-2 text-sm max-h-40 overflow-auto">
-                            ${state.brands.map(brand => `
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" ${state.filters.selectedBrands.includes(brand) ? 'checked' : ''} onchange="app.toggleBrand('${brand}')">
-                                    ${brand}
-                                </label>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold mb-2 text-sm">Cena (do ${state.filters.maxPrice} zł)</h4>
-                        <input type="range" min="0" max="1000" step="10" value="${state.filters.maxPrice}" class="w-full accent-[#cd5341]" onchange="app.setPrice(this.value)">
-                        <div class="flex justify-between text-xs text-stone-500 mt-1"><span>0</span><span>1000</span></div>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- PRODUKTY -->
-            <div class="col-span-12 md:col-span-9">
-                <div class="mb-6 flex justify-between items-center">
-                    <h1 class="text-2xl font-semibold text-stone-900">Wyniki: <span class="text-[#1e3a8a]">${state.filters.keyword || state.filters.category}</span></h1>
-                    <span class="text-sm text-stone-500">Znaleziono: ${products.length}</span>
-                </div>
-                ${products.length > 0 ? `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${products.map(p => `
-                            <div onclick="app.router('productDetail', '${p.id}')" class="group bg-white rounded-2xl border border-stone-200 hover:border-amber-400 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col overflow-hidden">
-                                <div class="relative bg-stone-100 h-40 flex items-center justify-center">
-                                    <i class="fa-solid fa-paint-roller text-4xl text-stone-300"></i>
-                                    <div class="absolute top-3 left-3 bg-white text-xs font-bold text-amber-600 px-2 py-1 rounded-full shadow">${p.categoryName || ''}</div>
-                                </div>
-                                <div class="flex flex-col flex-1 p-4">
-                                    <h3 class="font-semibold text-sm mb-1 line-clamp-2">${p.name}</h3>
-                                    <div class="text-xs text-stone-500 mb-2">Marka: ${p.attributes.brand || 'Inna'}</div>
-                                    <div class="mt-auto">
-                                        <div class="text-xs uppercase text-stone-500">Cena sugerowana</div>
-                                        <div class="text-xl font-bold text-stone-900">${p.price} zł</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : `<div class="text-center py-20 text-stone-500 border rounded-xl bg-stone-50">Brak produktów spełniających kryteria.</div>`}
-            </div>
-        </div>
-      </section>
-    ` : '';
-
-    container.innerHTML = `<div class="${container.dataset.sameHome === '1' ? '' : 'fade-in'} space-y-8">${searchHeader}${resultsSection}</div>`;
-  },
-
   wholesalersList: async container => {
     const params = new URLSearchParams();
     if(state.filters.city !== 'Wszystkie') params.append('city', state.filters.city);
@@ -423,3 +355,5 @@ function recalcMaterials() {
     const result = document.getElementById('paint-result');
     if(result) result.innerText = `${(area / coverage).toFixed(1)} L`;
 }
+
+window.app = app;

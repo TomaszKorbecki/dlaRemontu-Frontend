@@ -1,18 +1,9 @@
-import { BackgroundBubbles } from './BackgroundBubbles.js';
-
-/**
- * Wspólny layout strony
- * - ustawia tło
- * - dokłada bąbelki
- * - zapewnia poprawny z-index
- */
+    // PageLayout.js
 export function PageLayout({ content }) {
-  return `
-    <div class="relative">
-      ${BackgroundBubbles()}
-      <div class="relative z-10">
+    return `
+      <div class="relative">
         ${content}
       </div>
-    </div>
-  `;
-}
+    `;
+  }
+  

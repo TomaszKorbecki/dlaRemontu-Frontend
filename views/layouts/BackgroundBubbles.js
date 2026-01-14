@@ -36,21 +36,5 @@ export function BackgroundBubbles() {
   
       </div>
   
-      <!-- BĄBELKI – TŁO POZA KARTĄ -->
-      <div class="hidden md:block absolute inset-0 pointer-events-none z-0">
-  
-        <!-- BĄBELEK TŁA (dekoracyjny) -->
-        <div
-          class="absolute
-                 -bottom-[220px] -left-[260px]
-                 w-[520px] h-[520px]"
-          style="
-            background:#6b70a3;
-            opacity:0.15;
-            border-radius:55% 45% 60% 40% / 40% 60% 45% 55%;
-          "
-        ></div>
-  
-      </div>
     `;
   }  

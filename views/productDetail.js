@@ -1,18 +1,16 @@
 import { productDetailTemplate } from './productDetail.template.js';
 
 export async function productDetailView(
-  container,
-  productId,
-  {
-    API_URL,
-    state,
-    renderSearchBar,
-    renderAssistantTeaser,
-    renderAssistantSection,
-    hasUserLocation,
-    initLocationsMap
-  }
-) {
+    container,
+    productId,
+    {
+      API_URL,
+      state,
+      renderSearchBar,
+      hasUserLocation,
+      initLocationsMap
+    }
+  ) {
   try {
     const res = await fetch(`${API_URL}/products/${productId}`);
 
@@ -25,14 +23,12 @@ export async function productDetailView(
     const { product, availability } = await res.json();
 
     container.innerHTML = productDetailTemplate({
-      product,
-      availability,
-      state,
-      renderSearchBar,
-      renderAssistantTeaser,
-      renderAssistantSection,
-      hasUserLocation
-    });
+        product,
+        availability,
+        state,
+        renderSearchBar,
+        hasUserLocation
+      });
 
     if (hasUserLocation()) {
       initLocationsMap({
