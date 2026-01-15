@@ -1,4 +1,8 @@
-export async function homeView(container, { state }) {
+import { CtaBubbles } from './layouts/CtaBubbles.js';
+
+export async function homeView(container, { state }) 
+{
+
 
 
     const isSearchActive =
@@ -7,17 +11,18 @@ export async function homeView(container, { state }) {
     state.filters.city !== 'Wszystkie';
   
     container.innerHTML = `
-  <div class="${container.dataset.sameHome === '1' ? '' : 'fade-in'}">
+  <div class="${container.dataset.sameHome === '1' ? '' : 'fade-in'} space-y-12">
   
     <!-- ================= HERO + SEARCH ================= -->
-    <section class="relative bg-white ${isSearchActive ? 'pt-16 pb-16' : 'py-24'}">
-  
+<section class="relative bg-white min-h-[445px] ${isSearchActive ? 'pt-16 pb-16' : 'py-24'}">
+   
       ${
         !isSearchActive
           ? `
-        <div class="absolute top-1/2 right-0 -translate-y-1/2
-                    w-[60%] h-full pointer-events-none z-0">
-          <div
+            <div class="absolute top-1/2 right-0 -translate-y-1/2
+              w-[60%] h-[100%]
+              pointer-events-none z-0">
+                      <div
             class="absolute inset-0 bg-cover bg-center opacity-90"
             style="background-image:url('./images/1.jpg')">
           </div>
@@ -165,9 +170,12 @@ export async function homeView(container, { state }) {
     ${
       !isSearchActive
         ? `
-    <section class="max-w-7xl mx-auto px-6 mt-20">
-      <!-- KARTA -->
-  <div class="relative z-10 bg-[#2d2f44] rounded-[32px] overflow-hidden">
+<section class="relative max-w-7xl mx-auto px-6 mt-20 overflow-visible">
+
+  ${CtaBubbles()}
+
+  <!-- KARTA -->
+  <div class="relative z-20 bg-[#2d2f44] rounded-[32px] overflow-hidden">
 
     
 
