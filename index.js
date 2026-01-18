@@ -4,7 +4,10 @@ import { BackgroundBubbles } from './views/layouts/BackgroundBubbles.js';
 import { homeView } from './views/home.view.js';
 import { productListView } from './views/productList.view.js';
 
+let cachedJoinHTML = null;
 
+const SOFT_VIEWS = ['productList', 'join'];
+const HEAVY_VIEWS = ['wholesalerDetail'];
 
 function renderSearchBar() {
   return SearchBar({ state });
@@ -26,14 +29,45 @@ const state = {
   cities: [],
   brands: [],
   searchMode: 'products', // 'products' | 'wholesalers'
-  filters: { keyword: '', category: '', city: 'Wszystkie', minPrice:0, maxPrice:1000, selectedBrands:[], attributes: {} },
-  wholesalerAssortment: { category: null, keyword: '', prevKeyword: '', openCategories: {}, openSubcategories: {} },
+  filters: {
+    keyword: '',
+    category: '',
+    city: 'Wszystkie',
+    minPrice: 0,
+    maxPrice: 1000,
+    selectedBrands: [],
+    attributes: {}
+  },
+  wholesalerAssortment: {
+    category: null,
+    keyword: '',
+    prevKeyword: '',
+    openCategories: {},
+    openSubcategories: {}
+  },
   wholesalerSearch: { query: '' },
   activeWholesalerId: null,
-  calc: { mode: 'area', area: 0, walls: [], windows: 0, doors: 0, coats: 2 }
+
+  calc: {
+    mode: 'area',
+    area: 0,
+    walls: [],
+    windows: 0,
+    doors: 0,
+    coats: 2
+  },
+
+  ui: {
+    showAssistant: false
+  }
 };
 
+
 const app = {
+
+  currentView: null,
+
+
   init: async () => {
     const container = document.getElementById('app-content');
     try {
@@ -52,21 +86,23 @@ const app = {
 
   router: async (view, param = null) => {
     const container = document.getElementById('app-content');
-    const isSameHome = view === 'home' && container.dataset.view === 'home';
-    container.dataset.sameHome = isSameHome ? '1' : '0';
-    if (!isSameHome) container.innerHTML = '<div class="loader"></div>';
+    const isSameView = view === app.currentView;
+  
+    // loader tylko dla ciężkich widoków
+    if (!isSameView && HEAVY_VIEWS.includes(view)) {
+      container.innerHTML = '<div class="loader"></div>';
+    }
+  
+    app.currentView = view;
     container.dataset.view = view;
-
+  
     try {
       if (view === 'home') {
         await homeView(container, { state });
       }
-            else if (view === 'wholesalersList') await views.wholesalersList(container);
-            else if (view === 'productList') {
-              await productListView(container, { state, API_URL });
-            }
-            
-
+      else if (view === 'productList') {
+        await productListView(container, { state, API_URL });
+      }
       else if (view === 'productDetail') {
         await productDetailView(container, param, {
           API_URL,
@@ -75,15 +111,27 @@ const app = {
           hasUserLocation,
           initLocationsMap
         });
-      }      
-      else if (view === 'wholesalerDetail') await views.wholesalerDetail(container, param);
-      else if (view === 'join') await views.join(container);
-      else if (view === 'admin') await views.admin(container);
-      if (!isSameHome) window.scrollTo(0, 0);
+      }
+      else if (view === 'wholesalersList') {
+        await views.wholesalersList(container);
+      }
+      else if (view === 'wholesalerDetail') {
+        await views.wholesalerDetail(container, param);
+      }
+      else if (view === 'join') {
+        await views.join(container);
+      }
+      else if (view === 'admin') {
+        await views.admin(container);
+      }
+  
+      if (!isSameView) window.scrollTo(0, 0);
+  
     } catch (e) {
       container.innerHTML = `<p class="text-red-500 p-4">Błąd: ${e.message}</p>`;
     }
-  },
+  }
+  ,
 
   setFilter: (key, val) => {
     state.filters[key] = val;
@@ -328,11 +376,14 @@ const views = {
 
 // Tu rozpoczyta się sekcja kontaktu
 
-  join: async (container) => {
+join: async (container) => {
+  if (!cachedJoinHTML) {
     const res = await fetch('/views/static/join.html');
-    const html = await res.text();
-    container.innerHTML = html;
-  },
+    cachedJoinHTML = await res.text();
+  }
+  container.innerHTML = cachedJoinHTML;
+},
+
 };
 
 // Tu kończy się sekcja kontaktu
@@ -356,4 +407,48 @@ function recalcMaterials() {
     if(result) result.innerText = `${(area / coverage).toFixed(1)} L`;
 }
 
+app.updateProductList = () => {
+  if (typeof productListView !== 'undefined' && productListView.update) {
+    productListView.update(state);
+  }
+};
+
+window.openExtendedAssistant = function () {
+  const el = document.getElementById('extended-assistant');
+  if (!el) return;
+
+  if (el.classList.contains('hidden')) {
+    el.classList.remove('hidden');
+  }
+
+  el.scrollIntoView({ behavior: 'smooth' });
+};
+
+window.toggleExtendedAssistant = function () {
+  const el = document.getElementById('extended-assistant');
+  if (!el) return;
+
+  el.classList.add('hidden');
+
+  document
+    .getElementById('assistant-section')
+    ?.scrollIntoView({ behavior: 'smooth' });
+};
+
+window.applyCityFromProduct = function () {
+  const input = document.getElementById('productCityInput');
+  if (!input) return;
+
+  const city = input.value.trim();
+  if (!city) return;
+
+  // 1️⃣ ustawiamy lokalizację
+  state.filters.city = city;
+
+  // 2️⃣ wracamy NA TEN SAM PRODUKT
+  app.router('productDetail', state.currentProductId);
+};
+
+
 window.app = app;
+

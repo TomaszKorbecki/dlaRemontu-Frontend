@@ -193,10 +193,8 @@ Prowadzisz sklep lub hurtownię budowlaną?
 
         <br><button
             onclick="app.router('join')"
-          class="inline-flex items-center bg-[#cd5341] hover:bg-[#993f31]
-                 transition text-white font-semibold px-6 py-3
-                 rounded-full shadow-lg"
-        >
+          class="px-4 py-2 text-sm md:px-6 md:py-3 md:text-base whitespace-normal text-center max-w-[160px] md:max-w-none"
+
           Skontaktuj się z Nami
         </button>
       </div>

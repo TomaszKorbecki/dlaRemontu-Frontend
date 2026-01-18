@@ -1,23 +1,46 @@
 import { BackgroundBubbles } from './layouts/BackgroundBubbles.js';
 
+let cachedProducts = null;
+let lastFetchKey = '';
+    
 export async function productListView(container, { state, API_URL }) {
 
-  /* ================= FETCH ================= */
 
-  const params = new URLSearchParams({
+
+  /* ================= FETCH (CACHED) ================= */
+
+const fetchKey = JSON.stringify({
     keyword: state.filters.keyword || '',
     category: state.filters.category || '',
-    city: state.filters.city !== 'Wszystkie' ? state.filters.city : '',
-    minPrice: state.filters.minPrice,
-    maxPrice: state.filters.maxPrice
+    city: state.filters.city !== 'Wszystkie' ? state.filters.city : ''
   });
-
-  if (state.filters.selectedBrands.length > 0) {
-    params.append('brands', state.filters.selectedBrands.join(','));
+  
+  let products;
+  
+  if (!cachedProducts || fetchKey !== lastFetchKey) {
+    const params = new URLSearchParams({
+      keyword: state.filters.keyword || '',
+      category: state.filters.category || '',
+      city: state.filters.city !== 'Wszystkie' ? state.filters.city : ''
+    });
+  
+    const res = await fetch(`${API_URL}/products?${params}`);
+    cachedProducts = await res.json();
+    lastFetchKey = fetchKey;
   }
-
-  const res = await fetch(`${API_URL}/products?${params}`);
-  const products = await res.json();
+  
+  products = cachedProducts;
+  
+  /* ================= FILTERING (LOCAL, FAST) ================= */
+  
+  if (state.filters.selectedBrands.length > 0) {
+    products = products.filter(p =>
+      state.filters.selectedBrands.includes(p.attributes?.brand)
+    );
+  }
+  
+  products = products.filter(p => p.price <= state.filters.maxPrice);
+  
 
   /* ================= HEADER (JAK DAWNIEJ) ================= */
 
@@ -103,7 +126,7 @@ export async function productListView(container, { state, API_URL }) {
                     <input
                       type="checkbox"
                       ${state.filters.selectedBrands.includes(brand) ? 'checked' : ''}
-                      onchange="app.toggleBrand('${brand}')"
+                    onchange="app.toggleBrand('${brand}'); app.updateProductList()"
                     />
                     ${brand}
                   </label>
@@ -122,7 +145,7 @@ export async function productListView(container, { state, API_URL }) {
                 step="10"
                 value="${state.filters.maxPrice}"
                 class="w-full accent-[#cd5341]"
-                onchange="app.setPrice(this.value)"
+            onchange="app.setPrice(this.value); app.updateProductList()"
               />
             </div>
           </div>

@@ -5,11 +5,8 @@ export function ProductSidePanel({
     hasUserLocation
   }) {
     return `
-      <div class="lg:col-span-4">
         <div class="space-y-6">
-  
-          <div class="h-[44px]"></div>
-  
+    
           <div class="bg-white rounded-xl border border-stone-200 p-4 space-y-2">
             <div class="text-xs uppercase tracking-wide text-stone-500">
               Cena producenta (sugerowana)
@@ -51,7 +48,6 @@ export function ProductSidePanel({
             <div id="product-map-canvas" class="w-full h-full"></div>
           </div>
   
-        </div>
       </div>
     `;
   }  
