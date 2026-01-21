@@ -150,8 +150,26 @@
   
   .config-row-inline {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* tablet i wyżej */
+@media (min-width: 640px) {
+    .config-row-inline {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+  }
+
+@media (max-width: 360px) {
+    .mobile-action-bar > div {
+      flex-direction: column;
+    }
+  
+    .mobile-action-bar button {
+      width: 100%;
+    }
   }
 
   .config-label {
@@ -311,9 +329,26 @@
     background: #25327f;
   }
 
-  .assistant-done span {
-    text-decoration: line-through;
+  .assistant-done a {
     font-style: italic;
-    color: #a8a29e; /* stone-400 */
+    text-decoration: line-through;
+    color: #9ca3af; /* stone-400 */
   }
+  
+  .assistant-done a:hover {
+    text-decoration: line-through;
+    color: #9ca3af;
+  }
+  
+  .assistant-done {
+    opacity: 0.8;
+  }
+
+  .mobile-action-bar {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+
   

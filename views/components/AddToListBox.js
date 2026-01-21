@@ -6,12 +6,12 @@ export function AddToListBox({ state }) {
     return `
       <section class="add-to-list-box">
         <h4 class="add-to-list-title">
-          Dodaj do listy zakupów:
+          Checklista
         </h4>
   
         <p class="add-to-list-desc">
-          Skompletuj listę zakupów, żeby o niczym nie zapomnieć.
-          Możesz ją zapisać albo wysłać od razu do sklepu do wyceny.
+
+Checklista pomaga przygotować się do pracy i niczego nie pominąć. Brakujące elementy możesz dodać ręcznie albo skorzystać z pomocy asystenta.
         </p>
   
         <div class="add-to-list-actions">

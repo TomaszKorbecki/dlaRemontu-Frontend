@@ -70,19 +70,34 @@ const app = {
 
   init: async () => {
     const container = document.getElementById('app-content');
+  
+    // 1️⃣ render home NATYCHMIAST
+    app.router('home');
+  
     try {
+      // 2️⃣ init API w tle
       const res = await fetch(`${API_URL}/init`);
       if (!res.ok) throw new Error('Błąd API');
+  
       const data = await res.json();
       state.categories = data.categories;
       state.cities = ['Wszystkie', ...data.cities];
       state.brands = data.brands || [];
-      app.router('home');
+  
+      // 3️⃣ opcjonalny rerender home
+      if (app.currentView === 'home') {
+        app.router('home');
+      }
+  
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<div class="text-center p-10 bg-red-50 text-red-700 rounded border border-red-200 mt-10"><h2 class="text-2xl font-bold mb-2">Błąd połączenia z serwerem</h2><p>Uruchom <strong>node server.js</strong>.</p></div>`;
+      container.insertAdjacentHTML(
+        'afterbegin',
+        `<div class="text-red-500 text-sm p-4">Błąd połączenia z API</div>`
+      );
     }
-  },
+  }, 
+
 
   router: async (view, param = null) => {
     const container = document.getElementById('app-content');
@@ -447,6 +462,22 @@ window.applyCityFromProduct = function () {
 
   // 2️⃣ wracamy NA TEN SAM PRODUKT
   app.router('productDetail', state.currentProductId);
+};
+
+window.scrollToProductMap = function () {
+  const map = document.getElementById('product-map');
+  if (!map) return;
+
+  const yOffset = -80;
+  const y =
+    map.getBoundingClientRect().top +
+    window.pageYOffset +
+    yOffset;
+
+  window.scrollTo({
+    top: y,
+    behavior: 'smooth'
+  });
 };
 
 
